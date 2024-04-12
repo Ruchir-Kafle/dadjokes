@@ -23,7 +23,7 @@
       }
       h1 {
         font-family: "Luckiest Guy", sans-serif;
-        font-size: 2rem;
+        font-size: 3rem;
         letter-spacing: 0.1rem;
         font-weight: normal;
         color: #b0ffb0;
@@ -47,6 +47,7 @@
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
         transition: 0.3s all ease;
         color: #333;
+        font-size: 1.5rem;
       }
       p {
         font-size: 1.5rem;
@@ -60,29 +61,48 @@
   <body>
     <main>
       <h1>Dad Jokes</h1>
-      <button>New Joke</button>
+      <button>New joke &hellip;</button>
       <p>This site requires JS to work.</p>
     </main>
     <script>
-      async function getJoke() {
-        const response = fetch("https://icanhazdadjoke.com/", {
-          headers: {
-            Accept: "text/plain",
-          },
-        })
-          .then((response) => response.text())
-          .then((data) => {
-            const joke = data;
-            console.log(joke);
-            document.querySelector("p").innerHTML = joke;
+        let more = [
+            'New joke',
+            'Another joke',
+            'Gimme another',
+            'I need more',
+            'More please',
+            'Another',
+            "Keep this train rollin'",
+        ]
+
+        const btn = document.querySelector("button");
+        
+        let i=0;
+        btn.addEventListener("click", (evt) => getJoke());        
+        
+        async function getJoke() {
+            const response = fetch("https://icanhazdadjoke.com/", {
+                headers: {
+                    Accept: "text/plain",
+                },
+            })
+            .then((response) => response.text())
+            .then((data) => {
+                const joke = data;
+                console.log(joke);
+                btn.innerHTML = `${more[i]} &hellip;`;
+                i++;
+                if (i >= more.length) {
+                  i=1;
+                }
+
+                document.querySelector("p").innerHTML = joke;
             return joke;
           });
       }
 
       getJoke();
-      document
-        .querySelector("button")
-        .addEventListener("click", (evt) => getJoke());
+        
     </script>
   </body>
 </html>
