@@ -63,6 +63,8 @@
       <h1>Dad Jokes</h1>
       <button>New joke &hellip;</button>
       <p>This site requires JS to work.</p>
+      <p><button id="copyBtn">Share joke!</button></p>
+      <p class="afterCopy"></p>
     </main>
     <script>
         let more = [
@@ -73,10 +75,13 @@
             'More please',
             'Another',
             "Keep this train rollin'",
+            "I can't stop",
         ]
 
         const btn = document.querySelector("button");
         
+        jokes = [];
+        let joker = "";
         let i=0;
         btn.addEventListener("click", (evt) => getJoke());        
         
@@ -90,19 +95,57 @@
             .then((data) => {
                 const joke = data;
                 console.log(joke);
+                jokes.push(joke);
                 btn.innerHTML = `${more[i]} &hellip;`;
                 i++;
                 if (i >= more.length) {
                   i=1;
                 }
 
+                joker = joke;
+
                 document.querySelector("p").innerHTML = joke;
+                
             return joke;
           });
       }
-
       getJoke();
-        
+
+      async function reseter() {
+        setTimeout(()=>{
+          document.getElementById("copyBtn").textContent = "Share joke!";
+        }, 2000)
+      }
+
+      const copyBtn = document.getElementById("copyBtn");
+
+      if ("share" in navigator) {
+        copyBtn.addEventListener("click", async () => {
+            try {
+              navigator.share(joker);
+              document.getElementById("copyBtn").textContent = "Joke copied!";
+              reseter();
+            }
+            catch (error) {
+              document.getElementById("copyBtn").textContent = "Copy failed";
+              reseter();
+            }
+          });
+        }
+
+        else {
+          copyBtn.addEventListener("click", async () => {
+            try {
+              navigator.clipboard.writeText(joker);
+              document.getElementById("copyBtn").textContent = "Joke copied!";
+              reseter();
+            }
+            catch (error) {
+              document.getElementById("copyBtn").textContent = "Copy failed";
+              reseter();
+            }
+          });
+        }
     </script>
   </body>
 </html>
