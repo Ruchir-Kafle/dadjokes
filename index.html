@@ -64,9 +64,9 @@
   <body>
     <main>
       <h1>Dad Jokes</h1>
-      <button>New joke &hellip;</button>
+      <button id="joke-btn">New joke &hellip;</button>
       <p>This site requires JS to work.</p>
-      <p><button id="copyBtn">Share joke!</button></p>
+      <p><button id="copy-btn">Share joke!</button></p>
       <p class="afterCopy"></p>
     </main>
     <script>
@@ -77,78 +77,122 @@
         "I need more",
         "More please",
         "Another",
-        "Keep this train rollin'",
+        "Keep this train a rollin'",
         "I can't stop",
+        "won't stop",
+        "never gonna stop",
+        "never gonna give you up",
+        "never gonna let you down",
+        "never gonna run around",
+        "and dessert you",
       ];
-
-      const btn = document.querySelector("button");
-
+      
+      const jokeBtn = document.querySelector("#joke-btn");
+      const copyBtn = document.querySelector("#copy-btn");
+      
       jokes = [];
-      let joker = {
-        text: jokes,
-      };
-      console.log(joker);
+      let joker;
+      
       let i = 0;
-      btn.addEventListener("click", (evt) => getJoke());
-
+      jokeBtn.addEventListener("click", (evt) => getJoke());
+      
       async function getJoke() {
         const response = fetch("https://icanhazdadjoke.com/", {
           headers: {
             Accept: "text/plain",
           },
         })
-          .then((response) => response.text())
-          .then((data) => {
-            const joke = data;
-            // console.log(joke);
-            jokes.push(joke);
-            btn.innerHTML = `${more[i]} &hellip;`;
-            i++;
-            if (i >= more.length) {
-              i = 1;
-            }
-            // So, um, you have to enable "shareware" within about:config inside FireFox.
-            // joker = joke;
-            // console.log(joker);
-
-            document.querySelector("p").innerHTML = joke;
-
-            return joke;
-          });
+        .then((response) => response.text())
+        .then((data) => {
+          const joke = data;
+          jokes.push(joke);
+          setJoker();
+          jokeBtn.innerHTML = `${more[i]} &hellip;`;
+          i++;
+          if (i >= more.length) {
+            i = 1;
+          }
+          // So, um, you have to enable "shareware" within about:config inside FireFox.
+          // joker = joke;
+          // console.log(joker);
+          
+          document.querySelector("p").innerHTML = joke;
+          
+          return joke;
+        });
       }
-      getJoke();
-
+      
+      
       async function resetter() {
         setTimeout(() => {
-          document.getElementById("copyBtn").textContent = "Share joke!";
+          copyBtn.textContent = "Share joke!";
         }, 2000);
       }
-
-      const copyBtn = document.getElementById("copyBtn");
-
-      if ("share" in navigator) {
-        copyBtn.addEventListener("click", async () => {
-          try {
-            navigator.share(joker);
-            document.getElementById("copyBtn").textContent = "Joke copied!";
-            resetter();
-          } catch (error) {
-            document.getElementById("copyBtn").textContent = "Copy failed";
-            resetter();
+      console.log(navigator);
+      
+      copyBtn.addEventListener('click', shareOrCopy);
+      
+      function shareOrCopy(evt) {
+        if (navigator.canShare) {
+          if (navigator.canShare(joker)) {
+            shareJoke()
+          } else {
+            copyJoke();
           }
-        });
-      } else {
-        copyBtn.addEventListener("click", async () => {
-          try {
-            navigator.clipboard.writeText(joker);
-            document.getElementById("copyBtn").textContent = "Joke copied!";
-            resetter();
-          } catch (error) {
-            document.getElementById("copyBtn").textContent = "Copy failed";
-            resetter();
-          }
-        });
+        } else {
+          copyJoke();
+        }
+        
       }
+      
+      function shareJoke() {
+        navigator.share(joker);
+        copyBtn.textContent = "Joke copied!";
+        resetter();
+      }
+      
+      function copyJoke() {
+        try {
+          navigator.clipboard.writeText(joker.text);
+          copyBtn.textContent = "Joke copied!";
+          resetter();
+        } catch (error) {
+          copyBtn.textContent = "Copy failed";
+          resetter();
+        }
+      }
+      function setJoker() {
+        joker = {
+            text: `${jokes[jokes.length-1]} 
+            - 🤡 Want more jokes? Get them at https://jeffhow.github.io/dadjokes/ `,
+        };
+      }
+      
+      //   copyBtn.addEventListener("click", async () => {
+        //     try {
+          //       navigator.share(joker);
+          //       document.getElementById("copyBtn").textContent = "Joke copied!";
+          //       resetter();
+          //     } catch (error) {
+            //       document.getElementById("copyBtn").textContent = "Copy failed";
+            //       resetter();
+            //     }
+            //   });
+            // } else {
+              //   alert('can not share')
+              //   copyBtn.addEventListener("click", async () => {
+                //     try {
+                  //       navigator.clipboard.writeText(joker);
+                  //       document.getElementById("copyBtn").textContent = "Joke copied!";
+                  //       resetter();
+                  //     } catch (error) {
+                    //       document.getElementById("copyBtn").textContent = "Copy failed";
+                    //       resetter();
+                    //     }
+                    //   });
+                    // }
+        getJoke();
     </script>
   </body>
-</html>
+  </html>
+  
