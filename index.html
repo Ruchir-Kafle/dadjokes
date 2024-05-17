@@ -6,7 +6,10 @@
     <meta property="og:title" content="Dad Jokes" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://jeffhow.github.io/dadjokes/" />
-    <meta property="og:image" content="https://em-content.zobj.net/source/apple/391/clown-face_1f921.png" />
+    <meta
+      property="og:image"
+      content="https://em-content.zobj.net/source/apple/391/clown-face_1f921.png"
+    />
     <title>Dad Jokes</title>
     <link rel="icon" href="https://fav.farm/🤡" />
     <style>
@@ -67,85 +70,85 @@
       <p class="afterCopy"></p>
     </main>
     <script>
-        let more = [
-            'New joke',
-            'Another joke',
-            'Gimme another',
-            'I need more',
-            'More please',
-            'Another',
-            "Keep this train rollin'",
-            "I can't stop",
-        ]
+      let more = [
+        "New joke",
+        "Another joke",
+        "Gimme another",
+        "I need more",
+        "More please",
+        "Another",
+        "Keep this train rollin'",
+        "I can't stop",
+      ];
 
-        const btn = document.querySelector("button");
-        
-        jokes = [];
-        let joker = "";
-        let i=0;
-        btn.addEventListener("click", (evt) => getJoke());        
-        
-        async function getJoke() {
-            const response = fetch("https://icanhazdadjoke.com/", {
-                headers: {
-                    Accept: "text/plain",
-                },
-            })
-            .then((response) => response.text())
-            .then((data) => {
-                const joke = data;
-                console.log(joke);
-                jokes.push(joke);
-                btn.innerHTML = `${more[i]} &hellip;`;
-                i++;
-                if (i >= more.length) {
-                  i=1;
-                }
+      const btn = document.querySelector("button");
 
-                joker = joke;
+      jokes = [];
+      let joker = {
+        text: jokes,
+      };
+      console.log(joker);
+      let i = 0;
+      btn.addEventListener("click", (evt) => getJoke());
 
-                document.querySelector("p").innerHTML = joke;
-                
+      async function getJoke() {
+        const response = fetch("https://icanhazdadjoke.com/", {
+          headers: {
+            Accept: "text/plain",
+          },
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            const joke = data;
+            // console.log(joke);
+            jokes.push(joke);
+            btn.innerHTML = `${more[i]} &hellip;`;
+            i++;
+            if (i >= more.length) {
+              i = 1;
+            }
+            // So, um, you have to enable "shareware" within about:config inside FireFox.
+            // joker = joke;
+            // console.log(joker);
+
+            document.querySelector("p").innerHTML = joke;
+
             return joke;
           });
       }
       getJoke();
 
-      async function reseter() {
-        setTimeout(()=>{
+      async function resetter() {
+        setTimeout(() => {
           document.getElementById("copyBtn").textContent = "Share joke!";
-        }, 2000)
+        }, 2000);
       }
 
       const copyBtn = document.getElementById("copyBtn");
 
       if ("share" in navigator) {
         copyBtn.addEventListener("click", async () => {
-            try {
-              navigator.share(joker);
-              document.getElementById("copyBtn").textContent = "Joke copied!";
-              reseter();
-            }
-            catch (error) {
-              document.getElementById("copyBtn").textContent = "Copy failed";
-              reseter();
-            }
-          });
-        }
-
-        else {
-          copyBtn.addEventListener("click", async () => {
-            try {
-              navigator.clipboard.writeText(joker);
-              document.getElementById("copyBtn").textContent = "Joke copied!";
-              reseter();
-            }
-            catch (error) {
-              document.getElementById("copyBtn").textContent = "Copy failed";
-              reseter();
-            }
-          });
-        }
+          try {
+            navigator.share(joker);
+            document.getElementById("copyBtn").textContent = "Joke copied!";
+            resetter();
+          } catch (error) {
+            document.getElementById("copyBtn").textContent = "Copy failed";
+            resetter();
+          }
+        });
+      } else {
+        copyBtn.addEventListener("click", async () => {
+          try {
+            navigator.clipboard.writeText(joker);
+            document.getElementById("copyBtn").textContent = "Joke copied!";
+            resetter();
+          } catch (error) {
+            document.getElementById("copyBtn").textContent = "Copy failed";
+            resetter();
+          }
+        });
+      }
     </script>
   </body>
 </html>
