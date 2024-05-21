@@ -94,9 +94,18 @@
       let joker;
       
       let i = 0;
+      let j = 0;
       jokeBtn.addEventListener("click", (evt) => getJoke());
       
       async function getJoke() {
+        if (jokes.length >= 50) {
+          let joke = jokes[j];
+          j++;
+          if (j>=jokes.length) {
+            j=0;
+          }
+          return joke;
+        }
         const response = fetch("https://icanhazdadjoke.com/", {
           headers: {
             Accept: "text/plain",
@@ -113,8 +122,6 @@
             i = 1;
           }
           // So, um, you have to enable "shareware" within about:config inside FireFox.
-          // joker = joke;
-          // console.log(joker);
           
           document.querySelector("p").innerHTML = joke;
           
@@ -167,30 +174,6 @@
             - 🤡 Want more jokes? Get them at https://jeffhow.github.io/dadjokes/ `,
         };
       }
-      
-      //   copyBtn.addEventListener("click", async () => {
-        //     try {
-          //       navigator.share(joker);
-          //       document.getElementById("copyBtn").textContent = "Joke copied!";
-          //       resetter();
-          //     } catch (error) {
-            //       document.getElementById("copyBtn").textContent = "Copy failed";
-            //       resetter();
-            //     }
-            //   });
-            // } else {
-              //   alert('can not share')
-              //   copyBtn.addEventListener("click", async () => {
-                //     try {
-                  //       navigator.clipboard.writeText(joker);
-                  //       document.getElementById("copyBtn").textContent = "Joke copied!";
-                  //       resetter();
-                  //     } catch (error) {
-                    //       document.getElementById("copyBtn").textContent = "Copy failed";
-                    //       resetter();
-                    //     }
-                    //   });
-                    // }
         getJoke();
     </script>
   </body>
