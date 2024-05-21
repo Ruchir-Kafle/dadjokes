@@ -89,13 +89,14 @@
       
       const jokeBtn = document.querySelector("#joke-btn");
       const copyBtn = document.querySelector("#copy-btn");
+      copyBtn.addEventListener('click', shareOrCopy);
+      jokeBtn.addEventListener("click", getJoke);
       
+
       jokes = [];
       let joker;
-      
       let i = 0;
       let j = 0;
-      jokeBtn.addEventListener("click", (evt) => getJoke());
       
       async function getJoke() {
         if (jokes.length >= 50) {
@@ -105,7 +106,14 @@
             j=0;
           }
           return joke;
+        } else {
+          return fetchJoke();
         }
+        
+        
+      }
+
+      async function fetchJoke() {
         const response = fetch("https://icanhazdadjoke.com/", {
           headers: {
             Accept: "text/plain",
@@ -137,7 +145,6 @@
       }
       console.log(navigator);
       
-      copyBtn.addEventListener('click', shareOrCopy);
       
       function shareOrCopy(evt) {
         if (navigator.canShare) {
@@ -168,6 +175,7 @@
           resetter();
         }
       }
+
       function setJoker() {
         joker = {
             text: `${jokes[jokes.length-1]} 
