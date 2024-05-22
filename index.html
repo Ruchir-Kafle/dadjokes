@@ -10,57 +10,12 @@
       property="og:image"
       content="https://em-content.zobj.net/source/apple/391/clown-face_1f921.png"
     />
+    
     <title>Dad Jokes</title>
     <link rel="icon" href="https://fav.farm/🤡" />
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap");
-      body {
-        font-family: sans-serif;
-        background-color: #333;
-        color: white;
-        text-align: center;
-        max-width: 400px;
-        margin: auto;
-        min-height: 100vh;
-        margin-top: 30px;
-      }
-      h1 {
-        font-family: "Luckiest Guy", sans-serif;
-        font-size: 3rem;
-        letter-spacing: 0.1rem;
-        font-weight: normal;
-        color: #b0ffb0;
-        margin-bottom: 1rem;
-        text-align: center;
-        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
-      }
-      main {
-        display: flex;
-        align-items: center;
-        justify-content: end;
-        flex-direction: column;
-        min-height: 150px;
-        /*   background-color: #444; */
-      }
-
-      button {
-        background-color: #bada55;
-        padding: 8px 18px;
-        border: none;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
-        transition: 0.3s all ease;
-        color: #333;
-        font-size: 1.5rem;
-      }
-      p {
-        font-size: 1.5rem;
-        line-height: 1.5;
-      }
-      button:hover {
-        background-color: #b0ffb0;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css">
   </head>
+
   <body>
     <main>
       <h1>Dad Jokes</h1>
@@ -69,121 +24,7 @@
       <p><button id="copy-btn">Share joke!</button></p>
       <p class="afterCopy"></p>
     </main>
-    <script>
-      let more = [
-        "New joke",
-        "Another joke",
-        "Gimme another",
-        "I need more",
-        "More please",
-        "Another",
-        "Keep this train a rollin'",
-        "I can't stop",
-        "won't stop",
-        "never gonna stop",
-        "never gonna give you up",
-        "never gonna let you down",
-        "never gonna run around",
-        "and desert you",
-      ];
-      
-      const jokeBtn = document.querySelector("#joke-btn");
-      const copyBtn = document.querySelector("#copy-btn");
-      copyBtn.addEventListener('click', shareOrCopy);
-      jokeBtn.addEventListener("click", getJoke);
-      
 
-      jokes = [];
-      let joker;
-      let i = 0;
-      let j = 0;
-      
-      async function getJoke() {
-        if (jokes.length >= 50) {
-          let joke = jokes[j];
-          j++;
-          if (j>=jokes.length) {
-            j=0;
-          }
-          return joke;
-        } else {
-          return fetchJoke();
-        }
-        
-        
-      }
-
-      async function fetchJoke() {
-        const response = fetch("https://icanhazdadjoke.com/", {
-          headers: {
-            Accept: "text/plain",
-          },
-        })
-        .then((response) => response.text())
-        .then((data) => {
-          const joke = data;
-          jokes.push(joke);
-          setJoker();
-          jokeBtn.innerHTML = `${more[i]} &hellip;`;
-          i++;
-          if (i >= more.length) {
-            i = 1;
-          }
-          // So, um, you have to enable "shareware" within about:config inside FireFox.
-          
-          document.querySelector("p").innerHTML = joke;
-          
-          return joke;
-        });
-      }
-      
-      
-      async function resetter() {
-        setTimeout(() => {
-          copyBtn.textContent = "Share joke!";
-        }, 2000);
-      }
-      console.log(navigator);
-      
-      
-      function shareOrCopy(evt) {
-        if (navigator.canShare) {
-          if (navigator.canShare(joker)) {
-            shareJoke()
-          } else {
-            copyJoke();
-          }
-        } else {
-          copyJoke();
-        }
-        
-      }
-      
-      function shareJoke() {
-        navigator.share(joker);
-        copyBtn.textContent = "Joke copied!";
-        resetter();
-      }
-      
-      function copyJoke() {
-        try {
-          navigator.clipboard.writeText(joker.text);
-          copyBtn.textContent = "Joke copied!";
-          resetter();
-        } catch (error) {
-          copyBtn.textContent = "Copy failed";
-          resetter();
-        }
-      }
-
-      function setJoker() {
-        joker = {
-            text: `${jokes[jokes.length-1]} 
-            - 🤡 Want more jokes? Get them at https://jeffhow.github.io/dadjokes/ `,
-        };
-      }
-        getJoke();
-    </script>
+    <script src="app.js"></script>
   </body>
-  </html>
-  
+</html>
